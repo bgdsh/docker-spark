@@ -26,6 +26,11 @@ RUN apk add --no-cache curl bash openjdk8-jre python3 py-pip nss libc6-compat \
       #&& jar uf /spark/jars/spark-core_2.11-${SPARK_VERSION}.jar org/apache/spark/ui/static/timeline-view.css \
       && cd /
 
+# without this, numpy can't be installed
+RUN apk add --no-cache --virtual .build-deps g++ python3-dev libffi-dev openssl-dev && \
+    apk add --no-cache --update python3 && \
+    pip3 install --upgrade pip setuptools
+
 #Give permission to execute scripts
 RUN chmod +x /wait-for-step.sh && chmod +x /execute-step.sh && chmod +x /finish-step.sh
 
